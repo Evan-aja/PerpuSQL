@@ -2,12 +2,12 @@
 
 **This is my PerpuSQL**
 
--[x] TSQL
-    -[x] Init DB
-    -[x] procedures
--[ ] Python
-    -[ ] TUI
-    -[ ] integration
+- [x] TSQL
+    - [x] Init DB
+    - [x] procedures
+- [ ] Python
+    - [ ] TUI
+    - [ ] integration
 
 ## Python
 

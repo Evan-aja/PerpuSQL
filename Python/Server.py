@@ -1,3 +1,4 @@
+from typing import ValuesView
 from numpy import mod
 import pandas as pd
 import pyodbc 
@@ -20,9 +21,12 @@ print('Ready to receive')
 
 while True:
     message, clientAddress=serverSocket.recvfrom(2048)
-    result=pd.read_sql(message.decode(),cnxn)
-    print(result)
-    result=result.values
+    message=message.decode()
+    result=pd.read_sql('SELECT 1',cnxn).values
+    print(message)
+    if(message=='1'):
+        results=pd.read_sql("EXEC MASTERBUKU @COMMAND='SELECT'",cnxn)
+        result=results.values
     print(result)
     returns=json.dumps({"a":result.tolist()})
     serverSocket.sendto(returns.encode(),(clientAddress))

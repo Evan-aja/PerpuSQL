@@ -18,7 +18,8 @@ clientSocket=socket(AF_INET,SOCK_DGRAM)
 comm=int(input())
 def switch(comm):
     if(comm==1):
-        sql="EXEC MASTERBUKU @COMMAND='SELECT'"
+        # sql="EXEC MASTERBUKU @COMMAND='SELECT'"
+        sql='1'
         # df=pd.read_sql(sql,cnxn)
         # print(df)
         clientSocket.sendto(sql.encode(),(serverName,serverPort))
@@ -27,7 +28,10 @@ def switch(comm):
         message=message.get("a")
         for m in message:
             print(m)
+        print(message[0][1])
         clientSocket.close()
+    # elif(comm==2):
+        
 switch(comm)
 
 #connect to db

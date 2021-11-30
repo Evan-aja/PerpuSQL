@@ -12,12 +12,13 @@ print('1. List Buku\n2. Pinjam Buku\n3. Ubah Profil')
 #server
 serverName='archlinux'
 serverPort=12000
-clientSocket=socket(AF_INET,SOCK_DGRAM)
+# clientSocket=socket(AF_INET,SOCK_DGRAM)
 
 #command
 comm=int(input())
 def switch(comm):
     if(comm==1):
+        clientSocket=socket(AF_INET,SOCK_DGRAM)
         sql='1'
         send=json.dumps({"a":sql})
         clientSocket.sendto(send.encode(),(serverName,serverPort))
@@ -26,25 +27,35 @@ def switch(comm):
         message=message.get("a")
         for m in message:
             print(m)
-        return message
         clientSocket.close()
+        return message
     elif(comm==2):
+        clientSocket=socket(AF_INET,SOCK_DGRAM)
         sql='2'
         siswa=int(input('masukkan id anda :\t'))
         pilih=switch(1)
         buku=int(input('buku mana yang anda pilih? :\t'))
         arr=[]
+        arr.append(siswa)
         for p in range(len(pilih)):
             if(pilih[p][0]==buku):
                 arr.append(pilih[p][0])
-                arr.append(pilih[p][1])
-                arr.append(pilih[p][2])
-                arr.append(pilih[p][3])
-        if(len(arr)>1):
-            print(arr)
+        if(len(arr)<2):
+            return
+        # print(arr)
+        send=json.dumps({"a":sql,"b":arr})
+        clientSocket.sendto(send.encode(),(serverName,serverPort))
+        message,serverAddress=clientSocket.recvfrom(2048)
+        message=json.loads(message.decode())
+        # print(message)
+        le=int(len(message.get("a")))
+        print(message.get("a")[le-1])
+        clientSocket.close()
+    elif(comm==3):
+        clientSocket=socket(AF_INET,SOCK_DGRAM)
+        clientSocket.close()
 
 
-        
 switch(comm)
 
 #connect to db

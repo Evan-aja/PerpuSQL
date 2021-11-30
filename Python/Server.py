@@ -24,8 +24,16 @@ while True:
     message=json.loads(message.decode())
     result=pd.read_sql('SELECT 1',cnxn).values
     if(message.get("a")=='1'):
-        results=pd.read_sql("EXEC MASTERBUKU @COMMAND='SELECT'",cnxn)
-        result=results.values
+        result=pd.read_sql("EXEC MASTERBUKU @COMMAND='SELECT'",cnxn).values
+    elif(message.get("a")=='2'):
+        arr=message.get("b")
+        sql="EXEC MASTERPINJAM @ID_MAHASISWA=?,@ID_BUKU=?,@COMMAND='ADD'"
+        cursor.execute(sql,arr)
+        cnxn.commit()
+        result=pd.read_sql("EXEC MASTERPINJAM @COMMAND='SELECT'",cnxn)
+        result['TANGGAL_PINJAM']=result['TANGGAL_PINJAM'].astype(str)
+        result['TANGGAL_KEMBALI']=result['TANGGAL_KEMBALI'].astype(str)
+        result=result.values
     print(result)
     returns=json.dumps({"a":result.tolist()})
     serverSocket.sendto(returns.encode(),(clientAddress))

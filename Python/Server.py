@@ -20,7 +20,9 @@ print('Ready to receive')
 
 while True:
     message, clientAddress=serverSocket.recvfrom(2048)
-    modifiedMessage=pd.read_sql(message.decode(),cnxn)
-    print(modifiedMessage)
-    modifiedMessage=modifiedMessage.values
-    serverSocket.sendto(modifiedMessage,(clientAddress))
+    result=pd.read_sql(message.decode(),cnxn)
+    print(result)
+    result=result.values
+    print(result)
+    returns=json.dumps({"a":result.tolist()})
+    serverSocket.sendto(returns.encode(),(clientAddress))

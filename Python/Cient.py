@@ -22,8 +22,11 @@ def switch(comm):
         # df=pd.read_sql(sql,cnxn)
         # print(df)
         clientSocket.sendto(sql.encode(),(serverName,serverPort))
-        modifiedMessage,serverAddress=clientSocket.recvfrom(2048)
-        print (modifiedMessage.decode())
+        message,serverAddress=clientSocket.recvfrom(2048)
+        message=json.loads(message.decode())
+        message=message.get("a")
+        for m in message:
+            print(m)
         clientSocket.close()
 switch(comm)
 

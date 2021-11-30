@@ -18,11 +18,9 @@ clientSocket=socket(AF_INET,SOCK_DGRAM)
 comm=int(input())
 def switch(comm):
     if(comm==1):
-        # sql="EXEC MASTERBUKU @COMMAND='SELECT'"
         sql='1'
-        # df=pd.read_sql(sql,cnxn)
-        # print(df)
-        clientSocket.sendto(sql.encode(),(serverName,serverPort))
+        send=json.dumps({"a":sql})
+        clientSocket.sendto(send.encode(),(serverName,serverPort))
         message,serverAddress=clientSocket.recvfrom(2048)
         message=json.loads(message.decode())
         message=message.get("a")

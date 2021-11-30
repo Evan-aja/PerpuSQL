@@ -21,10 +21,9 @@ print('Ready to receive')
 
 while True:
     message, clientAddress=serverSocket.recvfrom(2048)
-    message=message.decode()
+    message=json.loads(message.decode())
     result=pd.read_sql('SELECT 1',cnxn).values
-    print(message)
-    if(message=='1'):
+    if(message.get("a")=='1'):
         results=pd.read_sql("EXEC MASTERBUKU @COMMAND='SELECT'",cnxn)
         result=results.values
     print(result)

@@ -69,7 +69,7 @@ while True:
             
             clientSocket=socket(AF_INET,SOCK_DGRAM)
             while True:
-                siswa=int(input('Silahkan masukkan ID anda'))
+                siswa=int(input('Silahkan masukkan ID anda :\t'))
                 arr=[]
                 for i in range(len(message)):
                     if(message[i][0]==siswa):
@@ -106,13 +106,13 @@ while True:
                 ubah=int(input())
                 if(ubah==1):
                     print('Nama Depan : ',arr[1])
-                    arr[1]=input('Masukkan Nama depan baru')
+                    arr[1]=input('Masukkan Nama depan baru :\t')
                 elif(ubah==2):
                     print('Nama Depan : ',arr[2])
-                    arr[2]=input('Masukkan Nama belakang baru')
+                    arr[2]=input('Masukkan Nama belakang baru :\t')
                 elif(ubah==3):
                     print("Jenis Kelamin : ",arr[3])
-                    arr[3]=input('Masukkan Jenis Kelamin baru')
+                    arr[3]=input('Masukkan Jenis Kelamin baru :\t')
                 elif(ubah==4):
                     benarkah=False
                     while True:

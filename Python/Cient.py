@@ -7,8 +7,8 @@ from socket import *
 #init
 print('    __  __________    __    ____  __\n   / / / / ____/ /   / /   / __ \/ /\n  / /_/ / __/ / /   / /   / / / / /\n / __  / /___/ /___/ /___/ /_/ /_/\n/_/ /_/_____/_____/_____/\____(_)\n')
 
-print('Apa yang ingan anda lakukan hari ini? (masukkan angka)')
-print('1. List Buku\n2. Pinjam Buku\n3. Ubah Profil')
+# print('Apa yang ingan anda lakukan hari ini? (masukkan angka)')
+# print('1. List Buku\n2. Pinjam Buku\n3. Ubah Profil\n4. Keluar')
 
 #server
 serverName='archlinux'
@@ -17,6 +17,8 @@ serverPort=12000
 
 #command
 while True:
+    print('\nApa yang ingan anda lakukan hari ini? (masukkan angka)')
+    print('1. List Buku\n2. Pinjam Buku\n3. Ubah Profil\n4. Keluar')
     comm=int(input())
     def switch(comm):
         if(comm==1):
@@ -71,7 +73,10 @@ while True:
                 arr=[]
                 for i in range(len(message)):
                     if(message[i][0]==siswa):
-                        arr.append(message[i])
+                        arr.append(message[i][0])
+                        arr.append(message[i][1])
+                        arr.append(message[i][2])
+                        arr.append(message[i][3])
                 if(len(arr)<1):
                     print('ID anda salah, mohon memilih kembali')
                     continue
@@ -80,8 +85,8 @@ while True:
                     while True:
                         print(arr)
                         benar=input('Apakah data ini benar? (yes/no, default=no)').lower()
-                        yes={'yes','y'}
-                        no={'no','n',''}
+                        yes={'yes','y','ya'}
+                        no={'no','n','tidak',''}
                         if benar in yes:
                             benarkah=True
                             break
@@ -95,13 +100,52 @@ while True:
                         break
                     else:
                         continue
-            print(arr)
-
+            while True:
+                print('Apa yang ingin anda ubah?\n',arr)
+                print('1. Nama Depan\n2. Nama Belakang\n3. Jenis Kelamin\n4. Selesai')
+                ubah=int(input())
+                if(ubah==1):
+                    print('Nama Depan : ',arr[1])
+                    arr[1]=input('Masukkan Nama depan baru')
+                elif(ubah==2):
+                    print('Nama Depan : ',arr[2])
+                    arr[2]=input('Masukkan Nama belakang baru')
+                elif(ubah==3):
+                    print("Jenis Kelamin : ",arr[3])
+                    arr[3]=input('Masukkan Jenis Kelamin baru')
+                elif(ubah==4):
+                    benarkah=False
+                    while True:
+                        print(arr)
+                        benar=input('Apakah data ini benar? (yes/no, default=no)').lower()
+                        yes={'yes','y','ya'}
+                        no={'no','n','tidak',''}
+                        if benar in yes:
+                            benarkah=True
+                            break
+                        elif benar in no:
+                            benarkah=False
+                            break
+                        else :
+                            sys.stdout.write("Mohon repon dengan 'Yes' atau 'No'")
+                            continue
+                    if(benarkah==True):
+                        break
+                    else:
+                        continue
+            sql='3'
+            send=json.dumps({"a":sql,"b":arr})
+            clientSocket.sendto(send.encode(),(serverName,serverPort))
+            message,serverAddress=clientSocket.recvfrom(2048)
+            message=json.loads(message.decode())
+            for i in message.get("a"):
+                print(i)
             clientSocket.close()
-            
-
-
+        elif(comm==4):
+            print('Terima Kasih')
     switch(comm)
+    if(comm==4):
+        break
 
 #connect to db
 # server = 'localhost' 

@@ -36,6 +36,11 @@ while True:
         result=result.values
     elif(message.get("a")=='3'):
         arr=message.get("b")
+        print(arr)
+        sql="EXEC MASTERSISWA @ID_MAHASISWA=?,@NAMA_DEPAN=?,@NAMA_BELAKANG=?,@JENIS_KELAMIN=?,@COMMAND='UPDATE'"
+        cursor.execute(sql,arr)
+        cnxn.commit()
+        result=pd.read_sql("EXEC MASTERSISWA @COMMAND='SELECT'",cnxn).values
     elif(message.get("a")=='4'):
         result=pd.read_sql("EXEC MASTERSISWA @COMMAND='SELECT'",cnxn).values
     print(result)

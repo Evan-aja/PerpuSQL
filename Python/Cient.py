@@ -26,9 +26,24 @@ def switch(comm):
         message=message.get("a")
         for m in message:
             print(m)
-        print(message[0][1])
+        return message
         clientSocket.close()
-    # elif(comm==2):
+    elif(comm==2):
+        sql='2'
+        siswa=int(input('masukkan id anda :\t'))
+        pilih=switch(1)
+        buku=int(input('buku mana yang anda pilih? :\t'))
+        arr=[]
+        for p in range(len(pilih)):
+            if(pilih[p][0]==buku):
+                arr.append(pilih[p][0])
+                arr.append(pilih[p][1])
+                arr.append(pilih[p][2])
+                arr.append(pilih[p][3])
+        if(len(arr)>1):
+            print(arr)
+
+
         
 switch(comm)
 

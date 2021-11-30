@@ -34,6 +34,10 @@ while True:
         result['TANGGAL_PINJAM']=result['TANGGAL_PINJAM'].astype(str)
         result['TANGGAL_KEMBALI']=result['TANGGAL_KEMBALI'].astype(str)
         result=result.values
+    elif(message.get("a")=='3'):
+        arr=message.get("b")
+    elif(message.get("a")=='4'):
+        result=pd.read_sql("EXEC MASTERSISWA @COMMAND='SELECT'",cnxn).values
     print(result)
     returns=json.dumps({"a":result.tolist()})
     serverSocket.sendto(returns.encode(),(clientAddress))

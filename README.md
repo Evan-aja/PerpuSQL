@@ -6,7 +6,10 @@
     - [x] Init DB
     - [x] procedures
 - [ ] Python
-    - [ ] TUI
+    - [x] TUI (client)
+    - [ ] TUI (server)
+    - [ ] Client
+    - [ ] Server
     - [ ] integration
 
 ## Python

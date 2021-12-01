@@ -29,18 +29,28 @@ while True:
             message,serverAddress=clientSocket.recvfrom(2048)
             message=json.loads(message.decode())
             message=message.get("a")
-            for m in message:
-                print(m)
+            print('ID\tJudul\t\t   Genre\t\tPenulis')
+            for m in range(len(message)):
+                print('%d%20s%15s%20s'%(message[m][0],message[m][1],message[m][2],message[m][3]))
             clientSocket.close()
             return message
         elif(comm==2):
+            clientSocket=socket(AF_INET,SOCK_DGRAM)
+            sql='4'
+            send=json.dumps({"a":sql})
+            clientSocket.sendto(send.encode(),(serverName,serverPort))
+            message,serverAddress=clientSocket.recvfrom(2048)
+            message=json.loads(message.decode())
+            message=message.get("a")
+            clientSocket.close()
             clientSocket=socket(AF_INET,SOCK_DGRAM)
             sql='2'
             siswa=int(input('masukkan id anda :\t'))
             pilih=switch(1)
             buku=int(input('buku mana yang anda pilih? :\t'))
             arr=[]
-            arr.append(siswa)
+            if(siswa<=len(message)):
+                arr.append(siswa)
             for p in range(len(pilih)):
                 if(pilih[p][0]==buku):
                     arr.append(pilih[p][0])
@@ -52,8 +62,11 @@ while True:
             message,serverAddress=clientSocket.recvfrom(2048)
             message=json.loads(message.decode())
             # print(message)
-            le=int(len(message.get("a")))
-            print(message.get("a")[le-1])
+            print('%s%20s%15s%30s%30s'%('ID','Judul','Peminjam','Tanggal Pinjam','Tanggal Kembali'))
+            # le=int(len(message.get("a"))-1)
+            me=message.get("a")
+            print('%s%20s%15s%30s%30s'%(me[0][0],me[0][1],me[0][2],me[0][3],me[0][4]))
+            # print(message.get("a")[le-1])
             clientSocket.close()
         elif(comm==3):
             clientSocket=socket(AF_INET,SOCK_DGRAM)

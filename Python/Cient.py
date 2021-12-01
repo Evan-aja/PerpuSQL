@@ -4,16 +4,22 @@ import pyodbc
 import json
 from socket import *
 
+def recvv(socket):
+    data = b''
+    while True:
+        part=socket.recv(2048)
+        data+=part
+        if len(part)<2048:
+            break
+    return data
+
 #init
 print('    __  __________    __    ____  __\n   / / / / ____/ /   / /   / __ \/ /\n  / /_/ / __/ / /   / /   / / / / /\n / __  / /___/ /___/ /___/ /_/ /_/\n/_/ /_/_____/_____/_____/\____(_)\n')
 
-# print('Apa yang ingan anda lakukan hari ini? (masukkan angka)')
-# print('1. List Buku\n2. Pinjam Buku\n3. Ubah Profil\n4. Keluar')
 
 #server
 serverName='archlinux'
 serverPort=12000
-# clientSocket=socket(AF_INET,SOCK_DGRAM)
 
 #command
 while True:
@@ -26,7 +32,7 @@ while True:
             sql='1'
             send=json.dumps({"a":sql})
             clientSocket.sendto(send.encode(),(serverName,serverPort))
-            message,serverAddress=clientSocket.recvfrom(2048)
+            message=recvv(clientSocket)
             message=json.loads(message.decode())
             message=message.get("a")
             print('ID\tJudul\t\t   Genre\t\tPenulis')
@@ -39,7 +45,8 @@ while True:
             sql='4'
             send=json.dumps({"a":sql})
             clientSocket.sendto(send.encode(),(serverName,serverPort))
-            message,serverAddress=clientSocket.recvfrom(2048)
+            # message,serverAddress=clientSocket.recv(16384)
+            message=recvv(clientSocket)
             message=json.loads(message.decode())
             message=message.get("a")
             clientSocket.close()
@@ -59,21 +66,18 @@ while True:
             # print(arr)
             send=json.dumps({"a":sql,"b":arr})
             clientSocket.sendto(send.encode(),(serverName,serverPort))
-            message,serverAddress=clientSocket.recvfrom(2048)
+            message=recvv(clientSocket)
             message=json.loads(message.decode())
-            # print(message)
             print('%s%20s%15s%30s%30s'%('ID','Judul','Peminjam','Tanggal Pinjam','Tanggal Kembali'))
-            # le=int(len(message.get("a"))-1)
             me=message.get("a")
             print('%s%20s%15s%30s%30s'%(me[0][0],me[0][1],me[0][2],me[0][3],me[0][4]))
-            # print(message.get("a")[le-1])
             clientSocket.close()
         elif(comm==3):
             clientSocket=socket(AF_INET,SOCK_DGRAM)
             sql='4'
             send=json.dumps({"a":sql})
             clientSocket.sendto(send.encode(),(serverName,serverPort))
-            message,serverAddress=clientSocket.recvfrom(2048)
+            message=recvv(clientSocket)
             message=json.loads(message.decode())
             message=message.get("a")
             for m in message:
@@ -149,7 +153,7 @@ while True:
             sql='3'
             send=json.dumps({"a":sql,"b":arr})
             clientSocket.sendto(send.encode(),(serverName,serverPort))
-            message,serverAddress=clientSocket.recvfrom(2048)
+            message=recvv(clientSocket)
             message=json.loads(message.decode())
             for i in message.get("a"):
                 print(i)
@@ -159,11 +163,3 @@ while True:
     switch(comm)
     if(comm==4):
         break
-
-#connect to db
-# server = 'localhost' 
-# database = 'PerpuSQL' 
-# username = 'SA' 
-# password = 'Gabrielle909' 
-# cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
-# cursor = cnxn.cursor()

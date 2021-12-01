@@ -29,7 +29,7 @@ def rotate(arr):
     return arr
 
 while True:
-    message, clientAddress=serverSocket.recvfrom(2048)
+    message, clientAddress=serverSocket.recvfrom(16384)
     message=json.loads(message.decode())
     result=pd.read_sql('SELECT 1',cnxn).values
     if(message.get("a")=='1'):
@@ -44,12 +44,12 @@ while True:
         
         cursor.execute(sql,arr)
         cnxn.commit()
-        # result=pd.read_sql("EXEC MASTERPINJAM @COMMAND='SELECT'",cnxn)
+        result=pd.read_sql("EXEC MASTERPINJAM @COMMAND='SELECT'",cnxn)
 
-        result=pd.read_sql('''SELECT TOP(10) ID_PINJAM,JUDUL,NAMA_DEPAN,TANGGAL_PINJAM,TANGGAL_KEMBALI FROM PINJAM P 
-                              LEFT JOIN MAHASISWA M ON P.ID_MAHASISWA=M.ID_MAHASISWA 
-                              LEFT JOIN BUKU B ON P.ID_BUKU=B.ID_BUKU
-                              ORDER BY ID_PINJAM DESC''',cnxn)
+        # result=pd.read_sql('''SELECT TOP(10) ID_PINJAM,JUDUL,NAMA_DEPAN,TANGGAL_PINJAM,TANGGAL_KEMBALI FROM PINJAM P 
+        #                       LEFT JOIN MAHASISWA M ON P.ID_MAHASISWA=M.ID_MAHASISWA 
+        #                       LEFT JOIN BUKU B ON P.ID_BUKU=B.ID_BUKU
+        #                       ORDER BY ID_PINJAM DESC''',cnxn)
         result['ID_PINJAM']=result['ID_PINJAM'].astype(str)
         result['TANGGAL_PINJAM']=result['TANGGAL_PINJAM'].astype(str)
         result['TANGGAL_KEMBALI']=result['TANGGAL_KEMBALI'].astype(str)

@@ -1,6 +1,5 @@
 import sys
 import pandas as pd
-# import pyodbc 
 import json
 from socket import *
 
@@ -175,7 +174,7 @@ while True:
             message=recvv(clientSocket)
             message=json.loads(message.decode())
             message=message.get("a")
-            print('\n%3s%20s%15s%20s'%('ID','Judul','Genre','Penulis'))
+            print('\n%3s%20s%15s%20s'%('ID','Firstname','Lastname','Gender'))
             for m in range(len(message)):
                 print('%3d%20s%15s%20s'%(message[m][0],message[m][1],message[m][2],message[m][3]))
             clientSocket.close()

@@ -1,5 +1,3 @@
-from typing import ValuesView
-from numpy import mod
 import pandas as pd
 import pyodbc 
 import json

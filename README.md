@@ -8,9 +8,8 @@
 - [ ] Python
     - [x] TUI (client)
     - [ ] TUI (server)
-    - [ ] Client
+    - [x] Client
     - [ ] Server
-    - [ ] integration
 
 ## Python
 

@@ -33,9 +33,12 @@ while True:
     message=json.loads(message.decode())
     result=pd.read_sql('SELECT 1',cnxn).values
     if(message.get("a")=='1'):
-        result=pd.read_sql("EXEC MASTERBUKU @COMMAND='SELECT'",cnxn).values
+        # result=pd.read_sql("EXEC MASTERBUKU @COMMAND='SELECT'",cnxn).values
         
-        # result=pd.read_sql("SELECT * FROM BUKU ORDER BY ID_BUKU ASC",cnxn).values
+        result=pd.read_sql('''SELECT ID_BUKU,JUDUL,GENRE,NAMA_DEPAN FROM BUKU B 
+                              LEFT JOIN GENRE G ON B.ID_GENRE=G.ID_GENRE 
+                              LEFT JOIN PENULIS P ON B.ID_PENULIS=P.ID_PENULIS
+                              ORDER BY ID_BUKU ASC''',cnxn).values
     elif(message.get("a")=='2'):
         arr=message.get("b")
         sql="EXEC MASTERPINJAM @ID_MAHASISWA=?,@ID_BUKU=?,@COMMAND='ADD'"
@@ -44,12 +47,12 @@ while True:
         
         cursor.execute(sql,arr)
         cnxn.commit()
-        result=pd.read_sql("EXEC MASTERPINJAM @COMMAND='SELECT'",cnxn)
+        # result=pd.read_sql("EXEC MASTERPINJAM @COMMAND='SELECT'",cnxn)
 
-        # result=pd.read_sql('''SELECT TOP(10) ID_PINJAM,JUDUL,NAMA_DEPAN,TANGGAL_PINJAM,TANGGAL_KEMBALI FROM PINJAM P 
-        #                       LEFT JOIN MAHASISWA M ON P.ID_MAHASISWA=M.ID_MAHASISWA 
-        #                       LEFT JOIN BUKU B ON P.ID_BUKU=B.ID_BUKU
-        #                       ORDER BY ID_PINJAM DESC''',cnxn)
+        result=pd.read_sql('''SELECT ID_PINJAM,JUDUL,NAMA_DEPAN,TANGGAL_PINJAM,TANGGAL_KEMBALI FROM PINJAM P 
+                              LEFT JOIN MAHASISWA M ON P.ID_MAHASISWA=M.ID_MAHASISWA 
+                              LEFT JOIN BUKU B ON P.ID_BUKU=B.ID_BUKU
+                              ORDER BY ID_PINJAM DESC''',cnxn)
         result['ID_PINJAM']=result['ID_PINJAM'].astype(str)
         result['TANGGAL_PINJAM']=result['TANGGAL_PINJAM'].astype(str)
         result['TANGGAL_KEMBALI']=result['TANGGAL_KEMBALI'].astype(str)
@@ -57,20 +60,20 @@ while True:
     elif(message.get("a")=='3'):
         arr=message.get("b")
         print(arr)
-        sql="EXEC MASTERSISWA @ID_MAHASISWA=?,@NAMA_DEPAN=?,@NAMA_BELAKANG=?,@JENIS_KELAMIN=?,@COMMAND='UPDATE'"
+        # sql="EXEC MASTERSISWA @ID_MAHASISWA=?,@NAMA_DEPAN=?,@NAMA_BELAKANG=?,@JENIS_KELAMIN=?,@COMMAND='UPDATE'"
         
-        # sql="UPDATE MAHASISWA SET NAMA_DEPAN=?,NAMA_BELAKANG=?,JENIS_KELAMIN=? WHERE ID_MAHASISWA=?"
-        # arr=rotate(arr)
+        sql="UPDATE MAHASISWA SET NAMA_DEPAN=?,NAMA_BELAKANG=?,JENIS_KELAMIN=? WHERE ID_MAHASISWA=?"
+        arr=rotate(arr)
 
         cursor.execute(sql,arr)
         cnxn.commit()
-        result=pd.read_sql("EXEC MASTERSISWA @COMMAND='SELECT'",cnxn).values
+        # result=pd.read_sql("EXEC MASTERSISWA @COMMAND='SELECT'",cnxn).values
         
-        # result=pd.read_sql("SELECT * FROM MAHASISWA ORDER BY ID_MAHASISWA ASC",cnxn).values
+        result=pd.read_sql("SELECT * FROM MAHASISWA ORDER BY ID_MAHASISWA ASC",cnxn).values
     elif(message.get("a")=='4'):
-        result=pd.read_sql("EXEC MASTERSISWA @COMMAND='SELECT'",cnxn).values
+        # result=pd.read_sql("EXEC MASTERSISWA @COMMAND='SELECT'",cnxn).values
         
-        # result=pd.read_sql("SELECT * FROM MAHASISWA ORDER BY ID_MAHASISWA ASC",cnxn).values
+        result=pd.read_sql("SELECT * FROM MAHASISWA ORDER BY ID_MAHASISWA ASC",cnxn).values
     print(result)
     returns=json.dumps({"a":result.tolist()})
     serverSocket.sendto(returns.encode(),(clientAddress))

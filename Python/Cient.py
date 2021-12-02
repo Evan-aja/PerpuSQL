@@ -12,6 +12,24 @@ def recvv(socket):
         if len(part)<2048:
             break
     return data
+def gender(choice):
+    switch = {
+        1:'Laki-Laki',
+        2:'Perempuan',
+        3:'NonBiner'
+    }
+    return switch.get(choice,'no')
+def genderchooser():
+    tmp=str
+    while True:
+        choice=int(input('\nPilih Gender anda :\n1. Laki-laki\n2. Perempuan\n3. NonBiner\n'))
+        tmp=gender(choice)
+        if tmp=='no':
+            print('Pilih 1-3')
+            continue
+        else:
+            break
+    return tmp
 
 #init
 print('    __  __________    __    ____  __\n   / / / / ____/ /   / /   / __ \/ /\n  / /_/ / __/ / /   / /   / / / / /\n / __  / /___/ /___/ /___/ /_/ /_/\n/_/ /_/_____/_____/_____/\____(_)\n')
@@ -35,9 +53,9 @@ while True:
             message=recvv(clientSocket)
             message=json.loads(message.decode())
             message=message.get("a")
-            print('ID\tJudul\t\t   Genre\t\tPenulis')
+            print('\n%3s%20s%15s%20s'%('ID','Judul','Genre','Penulis'))
             for m in range(len(message)):
-                print('%d%20s%15s%20s'%(message[m][0],message[m][1],message[m][2],message[m][3]))
+                print('%3d%20s%15s%20s'%(message[m][0],message[m][1],message[m][2],message[m][3]))
             clientSocket.close()
             return message
         elif(comm==2):
@@ -45,16 +63,15 @@ while True:
             sql='4'
             send=json.dumps({"a":sql})
             clientSocket.sendto(send.encode(),(serverName,serverPort))
-            # message,serverAddress=clientSocket.recv(16384)
             message=recvv(clientSocket)
             message=json.loads(message.decode())
             message=message.get("a")
             clientSocket.close()
             clientSocket=socket(AF_INET,SOCK_DGRAM)
             sql='2'
-            siswa=int(input('masukkan id anda :\t'))
+            siswa=int(input('masukkan id anda : '))
             pilih=switch(1)
-            buku=int(input('buku mana yang anda pilih? :\t'))
+            buku=int(input('buku mana yang anda pilih? : '))
             arr=[]
             if(siswa<=len(message)):
                 arr.append(siswa)
@@ -63,12 +80,11 @@ while True:
                     arr.append(pilih[p][0])
             if(len(arr)<2):
                 return
-            # print(arr)
             send=json.dumps({"a":sql,"b":arr})
             clientSocket.sendto(send.encode(),(serverName,serverPort))
             message=recvv(clientSocket)
             message=json.loads(message.decode())
-            print('%s%20s%15s%30s%30s'%('ID','Judul','Peminjam','Tanggal Pinjam','Tanggal Kembali'))
+            print('\n%s%20s%15s%30s%30s'%('ID','Judul','Peminjam','Tanggal Pinjam','Tanggal Kembali'))
             me=message.get("a")
             print('%s%20s%15s%30s%30s'%(me[0][0],me[0][1],me[0][2],me[0][3],me[0][4]))
             clientSocket.close()
@@ -80,13 +96,14 @@ while True:
             message=recvv(clientSocket)
             message=json.loads(message.decode())
             message=message.get("a")
-            for m in message:
-                print(m)
+            print('\n%3s%15s%15s%10s'%('ID','Firstname','Lastname','Gender'))
+            for m in range(len(message)):
+                print('%3d%15s%15s%10s'%(message[m][0],message[m][1],message[m][2],message[m][3]))
             clientSocket.close()
             
             clientSocket=socket(AF_INET,SOCK_DGRAM)
             while True:
-                siswa=int(input('Silahkan masukkan ID anda :\t'))
+                siswa=int(input('Silahkan masukkan ID anda : '))
                 arr=[]
                 for i in range(len(message)):
                     if(message[i][0]==siswa):
@@ -100,7 +117,8 @@ while True:
                 elif (len(arr)>0):
                     benarkah=False
                     while True:
-                        print(arr)
+                        print('\n%3s%15s%15s%10s'%('ID','Firstname','Lastname','Gender'))
+                        print('%3d%15s%15s%10s'%(arr[0],arr[1],arr[2],arr[3]))
                         benar=input('Apakah data ini benar? (yes/no, default=no)').lower()
                         yes={'yes','y','ya'}
                         no={'no','n','tidak',''}
@@ -118,22 +136,23 @@ while True:
                     else:
                         continue
             while True:
-                print('Apa yang ingin anda ubah?\n',arr)
+                print('\nApa yang ingin anda ubah?\n\n%3s%15s%15s%10s\n%3d%15s%15s%10s'%('ID','Firstname','Lastname','Gender',arr[0],arr[1],arr[2],arr[3]))
                 print('1. Nama Depan\n2. Nama Belakang\n3. Jenis Kelamin\n4. Selesai')
                 ubah=int(input())
                 if(ubah==1):
                     print('Nama Depan : ',arr[1])
-                    arr[1]=input('Masukkan Nama depan baru :\t')
+                    arr[1]=input('Masukkan Nama depan baru : ')
                 elif(ubah==2):
                     print('Nama Depan : ',arr[2])
-                    arr[2]=input('Masukkan Nama belakang baru :\t')
+                    arr[2]=input('Masukkan Nama belakang baru : ')
                 elif(ubah==3):
                     print("Jenis Kelamin : ",arr[3])
-                    arr[3]=input('Masukkan Jenis Kelamin baru :\t')
+                    arr[3]=genderchooser()
                 elif(ubah==4):
                     benarkah=False
                     while True:
-                        print(arr)
+                        print('\n%3s%15s%15s%10s'%('ID','Firstname','Lastname','Gender'))
+                        print('%3d%15s%15s%10s'%(arr[0],arr[1],arr[2],arr[3]))
                         benar=input('Apakah data ini benar? (yes/no, default=no)').lower()
                         yes={'yes','y','ya'}
                         no={'no','n','tidak',''}
@@ -155,8 +174,10 @@ while True:
             clientSocket.sendto(send.encode(),(serverName,serverPort))
             message=recvv(clientSocket)
             message=json.loads(message.decode())
-            for i in message.get("a"):
-                print(i)
+            message=message.get("a")
+            print('\n%3s%20s%15s%20s'%('ID','Judul','Genre','Penulis'))
+            for m in range(len(message)):
+                print('%3d%20s%15s%20s'%(message[m][0],message[m][1],message[m][2],message[m][3]))
             clientSocket.close()
         elif(comm==4):
             print('Terima Kasih')

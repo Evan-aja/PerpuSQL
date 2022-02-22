@@ -11,7 +11,7 @@ password = 'Gabrielle909'
 cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
 cursor = cnxn.cursor()
 
-serverPort=12000
+serverPort=50000
 serverSocket=socket(AF_INET,SOCK_DGRAM)
 serverSocket.bind(('',serverPort))
 

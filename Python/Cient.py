@@ -35,8 +35,8 @@ print('    __  __________    __    ____  __\n   / / / / ____/ /   / /   / __ \/ 
 
 
 #server
-serverName='archlinux'
-serverPort=12000
+serverName='localhost'
+serverPort=50000
 
 #command
 while True:

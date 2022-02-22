@@ -3,6 +3,7 @@ import pyodbc
 import json
 from socket import *
 
+#test commit
 #connect to db
 server = 'localhost' 
 database = 'PerpuSQL' 
